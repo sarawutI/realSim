@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>realSim · Artificial Chemistry</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <main id="stage">
+    <canvas id="view"></canvas>
+    <div id="hud"></div>
+    <div id="inspect" hidden></div>
+    <div id="hint">Drag to pan · scroll to zoom · click an atom to inspect · shift-click to inject the seed molecule</div>
+  </main>
+
+  <aside id="panel">
+    <header>
+      <h1>Artificial Chemistry</h1>
+      <p class="sub">Atoms, bonds and reaction rules. Nothing about life is programmed in, only chemistry. Everything else has to emerge.</p>
+    </header>
+
+    <section>
+      <div class="row">
+        <button id="play" class="primary">Pause</button>
+        <button id="reset">Reset</button>
+        <button id="inject">Inject seed</button>
+      </div>
+      <label class="field">World
+        <select id="preset"></select>
+      </label>
+      <p id="presetInfo" class="note"></p>
+    </section>
+
+    <section>
+      <h2>What's happening</h2>
+      <div id="stats" class="stats"></div>
+      <canvas id="chart"></canvas>
+      <div class="legend">
+        <span><i style="background:var(--s1)"></i><span id="legendFirst">molecules</span></span>
+        <span><i style="background:var(--s2)"></i>copies of top replicator</span>
+        <span><i style="background:var(--s3)"></i>largest molecule</span>
+      </div>
+      <h3>Most successful molecules</h3>
+      <ol id="species"></ol>
+    </section>
+
+    <section>
+      <h2>Conditions</h2>
+      <div id="sliders"></div>
+    </section>
+
+    <section>
+      <h2>Reaction rules</h2>
+      <textarea id="rules" spellcheck="false" rows="10"></textarea>
+      <div class="row">
+        <button id="applyRules">Apply rules</button>
+        <button id="randomize">New random chemistry</button>
+      </div>
+      <label class="field">Random seed <input id="chemSeed" value="genesis"></label>
+      <div id="ruleErrors" class="err"></div>
+      <label class="field">Seed molecule <input id="seedMol" value="e8 a1 b1 c1 d1 f1"></label>
+      <details>
+        <summary>How rules work</summary>
+        <p>Each atom has an element (<b>a–f</b>, the colour) and a state (a number). Rules fire when two atoms touch:</p>
+        <ul>
+          <li><code>e8 + e0 -&gt; e4e3</code>: two free atoms bond</li>
+          <li><code>x4y1 -&gt; x2y5</code>: two bonded atoms change state</li>
+          <li><code>f4f3 -&gt; f8 + f8</code>: a bond breaks</li>
+        </ul>
+        <p><code>x</code> and <code>y</code> match any element; an <code>x</code> used twice means "the same element". <code>: 0.4</code> at the end is the energy the reaction needs from the collision (negative = gives off heat). Energy is conserved; elements are never created or destroyed.</p>
+      </details>
+      <details>
+        <summary>What's real and what's simplified</summary>
+        <p><b>Real:</b> conservation of matter and energy, thermal motion (Brownian/Langevin), reactions that need collision energy, limited food, natural selection with no fitness function.</p>
+        <p><b>Built in for cells:</b> membranes let free atoms through but not molecules, reseal when broken, and pinch apart between two genomes. What genes do (enzymes) is fixed; which genes survive is not.</p>
+        <p><b>Simplified:</b> 2D instead of 3D, six made-up elements, reactions given as rules rather than derived from quantum mechanics, a few thousand atoms instead of 10²³.</p>
+      </details>
+    </section>
+  </aside>
+</div>
+<script src="src/chemistry.js"></script>
+<script src="src/world.js"></script>
+<script src="src/analysis.js"></script>
+<script src="src/cells.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
